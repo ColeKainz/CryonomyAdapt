@@ -15,6 +15,8 @@ class BittrexAdapter(key: String,
     IPingBittrexAdapter,
     IWithdrawalBittrexAdapter {
 
+    companion object { val NAME = "BITTREX" }
+
     private val _client: BittrexClient by lazy { BittrexClient(key, password) }
     override val client: BittrexClient
         get() = _client
