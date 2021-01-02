@@ -2,8 +2,6 @@ package adapters.bittrex
 
 import io.reactivex.Observable
 import models.markets.*
-import sun.security.krb5.internal.Ticket
-import java.math.BigDecimal
 
 interface IMarketBittrexAdapter : IBittrexAdapterBase {
     override fun getMarkets(): Observable<List<Market>> {
