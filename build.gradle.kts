@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.4.0"
     maven
+    `java-library`
 }
 
 group = "com.bushka.cryonomyadapt"
