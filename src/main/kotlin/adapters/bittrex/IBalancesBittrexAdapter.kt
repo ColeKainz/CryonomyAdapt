@@ -6,7 +6,7 @@ import models.balances.Balance
 
 interface IBalancesBittrexAdapter: IBittrexAdapterBase {
     override fun getBalances(): AdapterObservable<List<Balance>> {
-        return client.balance.getBalances().map { list ->
+        return client.balance.getBalances().mapToAdapter { list ->
             list.map {
                 Balance(it.currencySymbol, it.total, it.available, it.updatedAt)
             }
@@ -18,7 +18,7 @@ interface IBalancesBittrexAdapter: IBittrexAdapterBase {
     }
 
     override fun getBalances(symbol: String): AdapterObservable<List<Balance>> {
-        return client.balance.getBalances(symbol).map { list ->
+        return client.balance.getBalances(symbol).mapToAdapter { list ->
             list.map {
                 Balance(it.currencySymbol, it.total, it.available, it.updatedAt)
             }

@@ -9,7 +9,7 @@ import com.bushka.bittrex.model.conditionalorders.NewConditionalOrder as BNewCon
 
 interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
     override fun getConditionalOrder(id: String): AdapterObservable<ConditionalOrder> {
-        return client.conditionalOrders.getConditionalOrder(id).map {
+        return client.conditionalOrders.getConditionalOrder(id).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
                 marketSymbol = it.marketSymbol,
@@ -30,7 +30,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun deleteConditionalOrder(id: String): AdapterObservable<ConditionalOrder> {
-        return client.conditionalOrders.deleteConditionalOrder(id).map {
+        return client.conditionalOrders.deleteConditionalOrder(id).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
                 marketSymbol = it.marketSymbol,
@@ -65,7 +65,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
             pageSize,
             startDate,
             endDate
-        ).map {
+        ).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
                 marketSymbol = it.marketSymbol,
@@ -86,7 +86,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun openConditionalOrder(symbol: String?): AdapterObservable<ConditionalOrder> {
-        return client.conditionalOrders.openConditionalOrder(symbol).map {
+        return client.conditionalOrders.openConditionalOrder(symbol).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
                 marketSymbol = it.marketSymbol,
@@ -119,7 +119,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
             clientConditionalOrderId = newConditionalOrder.clientConditionalOrderId,
         )
 
-        return client.conditionalOrders.postConditionalOrder(newOrder).map {
+        return client.conditionalOrders.postConditionalOrder(newOrder).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
                 marketSymbol = it.marketSymbol,

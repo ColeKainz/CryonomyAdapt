@@ -9,7 +9,7 @@ import com.bushka.bittrex.model.addresses.NewAddress as BNewAddress
 
 interface IAddressesBittrexAdapter : IBittrexAdapterBase {
     override fun getAddresses(): AdapterObservable<List<Address>> {
-        return client.addresses.getAddresses().map { list ->
+        return client.addresses.getAddresses().mapToAdapter { list ->
             list.map {
                 val status = when (it.status) {
                     BAddressStatus.REQUESTED -> AddressStatus.REQUESTED
@@ -24,7 +24,7 @@ interface IAddressesBittrexAdapter : IBittrexAdapterBase {
     override fun putAddresses(address: NewAddress): AdapterObservable<List<Address>> {
         val bNewAddress = BNewAddress(address.currencySymbol)
 
-        return client.addresses.putAddresses(bNewAddress).map { list ->
+        return client.addresses.putAddresses(bNewAddress).mapToAdapter { list ->
             list.map {
                 val status = when (it.status) {
                     BAddressStatus.REQUESTED -> AddressStatus.REQUESTED
@@ -37,7 +37,7 @@ interface IAddressesBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getAddresses(symbol: String): AdapterObservable<Address> {
-        return client.addresses.getAddresses(symbol).map {
+        return client.addresses.getAddresses(symbol).mapToAdapter {
             val status = when (it.status) {
                 BAddressStatus.REQUESTED -> AddressStatus.REQUESTED
                 BAddressStatus.PROVISIONED -> AddressStatus.PROVISIONED

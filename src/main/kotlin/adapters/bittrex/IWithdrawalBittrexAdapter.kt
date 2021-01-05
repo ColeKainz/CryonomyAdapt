@@ -11,7 +11,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
         status: WithdrawalStatus?,
         symbol: String?
     ): AdapterObservable<List<Withdrawal>> {
-        return client.withdrawal.getOpenWithdrawals(status?.convert(), symbol).map { list ->
+        return client.withdrawal.getOpenWithdrawals(status?.convert(), symbol).mapToAdapter { list ->
             list.map {
                 Withdrawal(
                     it.id,
@@ -30,7 +30,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getWithdrawal(withdrawalId: String): AdapterObservable<Withdrawal> {
-        return client.withdrawal.getWithdrawal(withdrawalId).map {
+        return client.withdrawal.getWithdrawal(withdrawalId).mapToAdapter {
             Withdrawal(
                 it.id,
                 it.currencySymbol,
@@ -47,7 +47,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getWithdrawals(txId: String): AdapterObservable<List<Withdrawal>> {
-        return client.withdrawal.getWithdrawals(txId).map { list ->
+        return client.withdrawal.getWithdrawals(txId).mapToAdapter { list ->
             list.map {
                 Withdrawal(
                     it.id,
@@ -66,7 +66,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun deleteWithdrawal(withdrawalId: String): AdapterObservable<Withdrawal> {
-        return client.withdrawal.getWithdrawal(withdrawalId).map {
+        return client.withdrawal.getWithdrawal(withdrawalId).mapToAdapter {
             Withdrawal(
                 it.id,
                 it.currencySymbol,
@@ -83,7 +83,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun postWithdrawal(withdrawal: NewWithdrawal): AdapterObservable<Withdrawal> {
-        return client.withdrawal.postWithdrawal(withdrawal.convert()).map {
+        return client.withdrawal.postWithdrawal(withdrawal.convert()).mapToAdapter {
             Withdrawal(
                 it.id,
                 it.currencySymbol,
@@ -116,7 +116,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
             pageSize,
             startDate,
             endDate
-        ).map { list ->
+        ).mapToAdapter { list ->
             list.map {
                 Withdrawal(
                     it.id,
@@ -135,7 +135,7 @@ interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getWhiteListedAddresses(): AdapterObservable<WhiteListAddress> {
-        return client.withdrawal.getWhiteListedAddresses().map {
+        return client.withdrawal.getWhiteListedAddresses().mapToAdapter {
             WhiteListAddress(
                 it.currencySymbol,
                 it.createdAt,

@@ -6,7 +6,7 @@ import models.deposits.DepositStatus
 
 interface IDepositsBittrexAdapter : IBittrexAdapterBase {
     override fun getOpenDeposits(status: DepositStatus?, symbol: String?): AdapterObservable<List<Deposit>> {
-        return client.deposits.getOpenDeposits(status?.convert(), symbol).map { list ->
+        return client.deposits.getOpenDeposits(status?.convert(), symbol).mapToAdapter { list ->
             list.map {
                 Deposit(
                     it.id,
@@ -46,7 +46,7 @@ interface IDepositsBittrexAdapter : IBittrexAdapterBase {
             pageSize,
             startDate,
             endDate
-        ).map { list ->
+        ).mapToAdapter { list ->
             list.map {
                 Deposit(
                     it.id,
@@ -66,7 +66,7 @@ interface IDepositsBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getOpenDeposits(txId: String): AdapterObservable<List<Deposit>> {
-        return client.deposits.getOpenDeposits(txId).map { list ->
+        return client.deposits.getOpenDeposits(txId).mapToAdapter { list ->
             list.map {
                 Deposit(
                     it.id,
@@ -86,7 +86,7 @@ interface IDepositsBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getDeposit(depositId: String): AdapterObservable<Deposit> {
-        return client.deposits.getDeposit(depositId).map {
+        return client.deposits.getDeposit(depositId).mapToAdapter {
             Deposit(
                 it.id,
                 it.currencySymbol,

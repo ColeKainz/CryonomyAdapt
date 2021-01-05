@@ -8,7 +8,7 @@ import models.orders.Order
 
 interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     override fun getOpenOrders(symbol: String?): AdapterObservable<List<Order>> {
-        return client.orders.getOpenOrders(symbol).map { list ->
+        return client.orders.getOpenOrders(symbol).mapToAdapter { list ->
             list.map {
                 Order(
                     it.id,
@@ -38,7 +38,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getOrder(orderId: String): AdapterObservable<Order> {
-        return client.orders.getOrder(orderId).map {
+        return client.orders.getOrder(orderId).mapToAdapter {
             Order(
                 it.id,
                 it.marketSymbol,
@@ -62,7 +62,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun deleteOrder(orderId: String): AdapterObservable<Order> {
-        return client.orders.deleteOrder(orderId).map {
+        return client.orders.deleteOrder(orderId).mapToAdapter {
             Order(
                 it.id,
                 it.marketSymbol,
@@ -102,7 +102,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
             pageSize,
             startDate,
             endDate
-        ).map { list ->
+        ).mapToAdapter { list ->
             list.map {
                 Order(
                     it.id,
@@ -128,7 +128,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getExecutions(orderId: String): AdapterObservable<List<Execution>> {
-        return client.orders.getExecutions(orderId).map { list ->
+        return client.orders.getExecutions(orderId).mapToAdapter { list ->
             list.map {
                 Execution(
                     it.id,
@@ -145,7 +145,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun postOrder(order: NewOrder): AdapterObservable<Order> {
-        return client.orders.postOrder(order.convert()).map {
+        return client.orders.postOrder(order.convert()).mapToAdapter {
             Order(
                 it.id,
                 it.marketSymbol,

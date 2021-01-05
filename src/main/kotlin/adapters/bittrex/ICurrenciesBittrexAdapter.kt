@@ -5,7 +5,7 @@ import models.currencies.Currency
 
 interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
     override fun getCurrencies(): AdapterObservable<List<Currency>> {
-        return client.currencies.getCurrencies().map { list ->
+        return client.currencies.getCurrencies().mapToAdapter { list ->
             list.map {
                 Currency(
                     it.symbol,
@@ -24,7 +24,7 @@ interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getCurrency(symbol: String): AdapterObservable<Currency> {
-        return client.currencies.getCurrency(symbol).map {
+        return client.currencies.getCurrency(symbol).mapToAdapter {
             Currency(
                 it.symbol,
                 it.name,
