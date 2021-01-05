@@ -1,12 +1,11 @@
 package adapters.bittrex
 
-import io.reactivex.Observable
+import models.AdapterObservable
 import models.deposits.Deposit
 import models.deposits.DepositStatus
-import java.math.BigDecimal
 
 interface IDepositsBittrexAdapter : IBittrexAdapterBase {
-    override fun getOpenDeposits(status: DepositStatus?, symbol: String?): Observable<List<Deposit>> {
+    override fun getOpenDeposits(status: DepositStatus?, symbol: String?): AdapterObservable<List<Deposit>> {
         return client.deposits.getOpenDeposits(status?.convert(), symbol).map { list ->
             list.map {
                 Deposit(
@@ -38,7 +37,7 @@ interface IDepositsBittrexAdapter : IBittrexAdapterBase {
         pageSize: String?,
         startDate: String?,
         endDate: String?
-    ): Observable<List<Deposit>> {
+    ): AdapterObservable<List<Deposit>> {
         return client.deposits.getClosedDeposits(
             status?.convert(),
             symbol,
@@ -66,7 +65,7 @@ interface IDepositsBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getOpenDeposits(txId: String): Observable<List<Deposit>> {
+    override fun getOpenDeposits(txId: String): AdapterObservable<List<Deposit>> {
         return client.deposits.getOpenDeposits(txId).map { list ->
             list.map {
                 Deposit(
@@ -86,7 +85,7 @@ interface IDepositsBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getDeposit(depositId: String): Observable<Deposit> {
+    override fun getDeposit(depositId: String): AdapterObservable<Deposit> {
         return client.deposits.getDeposit(depositId).map {
             Deposit(
                 it.id,

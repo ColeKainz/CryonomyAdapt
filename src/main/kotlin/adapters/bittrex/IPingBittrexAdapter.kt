@@ -1,10 +1,10 @@
 package adapters.bittrex
 
-import io.reactivex.Observable
+import models.AdapterObservable
 import models.ping.Ping
 
 interface IPingBittrexAdapter: IBittrexAdapterBase {
-    override fun getPing(): Observable<Ping> {
+    override fun getPing(): AdapterObservable<Ping> {
         return client.ping.getPing().map {
             Ping(
                it.serverTime

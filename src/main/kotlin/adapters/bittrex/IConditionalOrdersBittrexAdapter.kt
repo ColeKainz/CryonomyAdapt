@@ -1,14 +1,14 @@
 package adapters.bittrex
 
 
-import io.reactivex.Observable
+import models.AdapterObservable
 import models.conditionalorders.*
 
 import com.bushka.bittrex.model.conditionalorders.NewConditionalOrder as BNewConditionalOrder
 
 
 interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
-    override fun getConditionalOrder(id: String): Observable<ConditionalOrder> {
+    override fun getConditionalOrder(id: String): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.getConditionalOrder(id).map {
             ConditionalOrder(
                 id = it.id,
@@ -29,7 +29,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun deleteConditionalOrder(id: String): Observable<ConditionalOrder> {
+    override fun deleteConditionalOrder(id: String): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.deleteConditionalOrder(id).map {
             ConditionalOrder(
                 id = it.id,
@@ -57,7 +57,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         pageSize: String?,
         startDate: String?,
         endDate: String
-    ): Observable<ConditionalOrder> {
+    ): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.closeConditionalOrder(
             symbol,
             nextPageToken,
@@ -85,7 +85,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun openConditionalOrder(symbol: String?): Observable<ConditionalOrder> {
+    override fun openConditionalOrder(symbol: String?): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.openConditionalOrder(symbol).map {
             ConditionalOrder(
                 id = it.id,
@@ -106,7 +106,7 @@ interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun postConditionalOrder(newConditionalOrder: NewConditionalOrder): Observable<ConditionalOrder> {
+    override fun postConditionalOrder(newConditionalOrder: NewConditionalOrder): AdapterObservable<ConditionalOrder> {
         val newOrder = BNewConditionalOrder(
             id = newConditionalOrder.id,
             marketSymbol = newConditionalOrder.marketSymbol,

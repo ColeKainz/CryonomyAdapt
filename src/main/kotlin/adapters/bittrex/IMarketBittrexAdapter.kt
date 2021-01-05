@@ -1,10 +1,10 @@
 package adapters.bittrex
 
-import io.reactivex.Observable
+import models.AdapterObservable
 import models.markets.*
 
 interface IMarketBittrexAdapter : IBittrexAdapterBase {
-    override fun getMarkets(): Observable<List<Market>> {
+    override fun getMarkets(): AdapterObservable<List<Market>> {
         return client.markets.getMarkets().map { list ->
             list.map {
                 Market(
@@ -22,7 +22,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getMarket(symbol: String): Observable<Market> {
+    override fun getMarket(symbol: String): AdapterObservable<Market> {
         return client.markets.getMarket(symbol).map {
             Market(
                 it.symbol,
@@ -39,7 +39,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
 
     }
 
-    override fun getMarketSummaries(): Observable<List<MarketSummary>> {
+    override fun getMarketSummaries(): AdapterObservable<List<MarketSummary>> {
         return client.markets.getMarketSummaries().map { list ->
             list.map {
                 MarketSummary(
@@ -54,7 +54,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getMarketSummary(symbol: String): Observable<MarketSummary> {
+    override fun getMarketSummary(symbol: String): AdapterObservable<MarketSummary> {
         return client.markets.getMarketSummary(symbol).map {
             MarketSummary(
                 it.high,
@@ -71,7 +71,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         return client.markets.checkMarketSummaries()
     }
 
-    override fun getTickers(): Observable<List<Ticker>> {
+    override fun getTickers(): AdapterObservable<List<Ticker>> {
         return client.markets.getTickers().map { list ->
             list.map {
                 Ticker(
@@ -84,7 +84,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getTicker(symbol: String): Observable<Ticker> {
+    override fun getTicker(symbol: String): AdapterObservable<Ticker> {
         return client.markets.getTicker(symbol).map {
             Ticker(
                 it.symbol,
@@ -99,7 +99,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         return client.markets.checkTickers()
     }
 
-    override fun getOrderBook(symbol: String, depth: OrderBookDepth): Observable<OrderBook> {
+    override fun getOrderBook(symbol: String, depth: OrderBookDepth): AdapterObservable<OrderBook> {
         return client.markets.getOrderBook(symbol, depth.convert()).map {
             OrderBook(
                 it.bid.map { it.convert() },
@@ -113,7 +113,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         client.markets.checkOrderBook(symbol, depth.convert())
     }
 
-    override fun getTrade(symbol: String): Observable<Trade> {
+    override fun getTrade(symbol: String): AdapterObservable<Trade> {
         return client.markets.getTrade(symbol).map {
             Trade(
                 it.id,
@@ -125,7 +125,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun checkTrade(symbol: String): Observable<Trade> {
+    override fun checkTrade(symbol: String): AdapterObservable<Trade> {
         return client.markets.checkTrade(symbol).map {
             Trade(
                 it.id,
@@ -137,7 +137,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getRecentCandles(symbol: String, candleInterval: CandleInterval): Observable<List<Candle>> {
+    override fun getRecentCandles(symbol: String, candleInterval: CandleInterval): AdapterObservable<List<Candle>> {
         return client.markets.getRecentCandles(symbol, candleInterval.convert()).map { list ->
             list.map {
                 Candle(
@@ -163,7 +163,7 @@ interface IMarketBittrexAdapter : IBittrexAdapterBase {
         year: Int,
         month: Int,
         day: Int
-    ): Observable<List<Candle>> {
+    ): AdapterObservable<List<Candle>> {
         return client.markets.getCandles(symbol, candleInterval.convert(), year, month, day).map { list ->
             list.map {
                 Candle(

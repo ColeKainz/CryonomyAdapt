@@ -1,16 +1,13 @@
 package adapters.bittrex
 
-import io.reactivex.Observable
-import models.conditionalorders.NewCancelConditionalOrder
+import models.AdapterObservable
 import models.conditionalorders.NewOrder
 import models.deposits.DepositStatus
-import models.markets.Candle
 import models.orders.Execution
 import models.orders.Order
-import java.math.BigDecimal
 
 interface IOrdersBittrexAdapter : IBittrexAdapterBase {
-    override fun getOpenOrders(symbol: String?): Observable<List<Order>> {
+    override fun getOpenOrders(symbol: String?): AdapterObservable<List<Order>> {
         return client.orders.getOpenOrders(symbol).map { list ->
             list.map {
                 Order(
@@ -40,7 +37,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.orders.checkOpenOrders()
     }
 
-    override fun getOrder(orderId: String): Observable<Order> {
+    override fun getOrder(orderId: String): AdapterObservable<Order> {
         return client.orders.getOrder(orderId).map {
             Order(
                 it.id,
@@ -64,7 +61,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun deleteOrder(orderId: String): Observable<Order> {
+    override fun deleteOrder(orderId: String): AdapterObservable<Order> {
         return client.orders.deleteOrder(orderId).map {
             Order(
                 it.id,
@@ -96,7 +93,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         pageSize: String?,
         startDate: String?,
         endDate: String?
-    ): Observable<List<Order>> {
+    ): AdapterObservable<List<Order>> {
         return client.orders.getClosedOrders(
             status?.convert(),
             symbol,
@@ -130,7 +127,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getExecutions(orderId: String): Observable<List<Execution>> {
+    override fun getExecutions(orderId: String): AdapterObservable<List<Execution>> {
         return client.orders.getExecutions(orderId).map { list ->
             list.map {
                 Execution(
@@ -147,7 +144,7 @@ interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun postOrder(order: NewOrder): Observable<Order> {
+    override fun postOrder(order: NewOrder): AdapterObservable<Order> {
         return client.orders.postOrder(order.convert()).map {
             Order(
                 it.id,

@@ -1,12 +1,10 @@
 package adapters.bittrex
 
+import models.AdapterObservable
 import models.currencies.Currency
-import com.bushka.bittrex.model.currencies.CurrencyStatus
-import io.reactivex.Observable
-import java.math.BigDecimal
 
 interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
-    override fun getCurrencies(): Observable<List<Currency>> {
+    override fun getCurrencies(): AdapterObservable<List<Currency>> {
         return client.currencies.getCurrencies().map { list ->
             list.map {
                 Currency(
@@ -25,7 +23,7 @@ interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getCurrency(symbol: String): Observable<Currency> {
+    override fun getCurrency(symbol: String): AdapterObservable<Currency> {
         return client.currencies.getCurrency(symbol).map {
             Currency(
                 it.symbol,

@@ -1,4 +1,5 @@
 import io.reactivex.Observable
+import models.AdapterObservable
 import models.account.*
 import models.addresses.*
 import models.balances.*
@@ -12,33 +13,33 @@ import models.withdrawals.*
 
 
 interface ICryonomyAdapter {
-    fun getAccount(): Observable<Account>
-    fun getAccountVolume(): Observable<AccountVolume>
+    fun getAccount(): AdapterObservable<Account>
+    fun getAccountVolume(): AdapterObservable<AccountVolume>
 
-    fun getAddresses(): Observable<List<Address>>
-    fun putAddresses(address: NewAddress): Observable<List<Address>>
-    fun getAddresses(symbol: String): Observable<Address>
+    fun getAddresses(): AdapterObservable<List<Address>>
+    fun putAddresses(address: NewAddress): AdapterObservable<List<Address>>
+    fun getAddresses(symbol: String): AdapterObservable<Address>
 
-    fun getBalances(): Observable<List<Balance>>
+    fun getBalances(): AdapterObservable<List<Balance>>
     fun checkBalances()
-    fun getBalances(symbol: String): Observable<List<Balance>>
+    fun getBalances(symbol: String): AdapterObservable<List<Balance>>
 
-    fun getConditionalOrder(id: String): Observable<ConditionalOrder>
-    fun deleteConditionalOrder(id: String): Observable<ConditionalOrder>
+    fun getConditionalOrder(id: String): AdapterObservable<ConditionalOrder>
+    fun deleteConditionalOrder(id: String): AdapterObservable<ConditionalOrder>
     fun closeConditionalOrder(symbol: String? = null,
                               nextPageToken: String? = null,
                               previousPageToken: String? = null,
                               pageSize: String? = null,
                               startDate: String? = null,
-                              endDate: String): Observable<ConditionalOrder>
-    fun openConditionalOrder(symbol: String? = null): Observable<ConditionalOrder>
-    fun postConditionalOrder(newConditionalOrder: NewConditionalOrder): Observable<ConditionalOrder>
+                              endDate: String): AdapterObservable<ConditionalOrder>
+    fun openConditionalOrder(symbol: String? = null): AdapterObservable<ConditionalOrder>
+    fun postConditionalOrder(newConditionalOrder: NewConditionalOrder): AdapterObservable<ConditionalOrder>
 
-    fun getCurrencies(): Observable<List<Currency>>
-    fun getCurrency(symbol: String): Observable<Currency>
+    fun getCurrencies(): AdapterObservable<List<Currency>>
+    fun getCurrency(symbol: String): AdapterObservable<Currency>
 
     fun getOpenDeposits(status: DepositStatus? = null,
-                        symbol: String? = null): Observable<List<Deposit>>
+                        symbol: String? = null): AdapterObservable<List<Deposit>>
     fun checkOpenDeposits()
     fun getClosedDeposits(status: DepositStatus? = null,
                           symbol: String? = null,
@@ -46,60 +47,60 @@ interface ICryonomyAdapter {
                           previousPageToken: String? = null,
                           pageSize: String? = null,
                           startDate: String? = null,
-                          endDate: String? = null): Observable<List<Deposit>>
-    fun getOpenDeposits(txId: String): Observable<List<Deposit>>
-    fun getDeposit(depositId: String): Observable<Deposit>
+                          endDate: String? = null): AdapterObservable<List<Deposit>>
+    fun getOpenDeposits(txId: String): AdapterObservable<List<Deposit>>
+    fun getDeposit(depositId: String): AdapterObservable<Deposit>
 
-    fun getMarkets(): Observable<List<Market>>
-    fun getMarket(symbol: String): Observable<Market>
-    fun getMarketSummaries(): Observable<List<MarketSummary>>
-    fun getMarketSummary(symbol: String): Observable<MarketSummary>
+    fun getMarkets(): AdapterObservable<List<Market>>
+    fun getMarket(symbol: String): AdapterObservable<Market>
+    fun getMarketSummaries(): AdapterObservable<List<MarketSummary>>
+    fun getMarketSummary(symbol: String): AdapterObservable<MarketSummary>
     fun checkMarketSummaries()
 
-    fun getTickers(): Observable<List<Ticker>>
-    fun getTicker(symbol: String): Observable<Ticker>
+    fun getTickers(): AdapterObservable<List<Ticker>>
+    fun getTicker(symbol: String): AdapterObservable<Ticker>
     fun checkTickers()
 
-    fun getOrderBook(symbol: String, depth: OrderBookDepth = OrderBookDepth.MID): Observable<OrderBook>
+    fun getOrderBook(symbol: String, depth: OrderBookDepth = OrderBookDepth.MID): AdapterObservable<OrderBook>
     fun checkOrderBook(symbol: String, depth: OrderBookDepth = OrderBookDepth.MID)
 
-    fun getTrade(symbol: String): Observable<Trade>
-    fun checkTrade(symbol: String): Observable<Trade>
-    fun getRecentCandles(symbol: String, candleInterval: CandleInterval): Observable<List<Candle>>
+    fun getTrade(symbol: String): AdapterObservable<Trade>
+    fun checkTrade(symbol: String): AdapterObservable<Trade>
+    fun getRecentCandles(symbol: String, candleInterval: CandleInterval): AdapterObservable<List<Candle>>
     fun checkRecentCandles(symbol: String, candleInterval: CandleInterval)
     fun getCandles(symbol: String,
                    candleInterval: CandleInterval,
                    year: Int,
                    month: Int,
-                   day: Int): Observable<List<Candle>>
-    fun getOpenOrders(symbol: String? = null): Observable<List<Order>>
+                   day: Int): AdapterObservable<List<Candle>>
+    fun getOpenOrders(symbol: String? = null): AdapterObservable<List<Order>>
     fun checkOpenOrders()
-    fun getOrder(orderId: String): Observable<Order>
-    fun deleteOrder(orderId: String): Observable<Order>
+    fun getOrder(orderId: String): AdapterObservable<Order>
+    fun deleteOrder(orderId: String): AdapterObservable<Order>
     fun getClosedOrders(status: DepositStatus? = null,
                         symbol: String? = null,
                         nextPageToken: String? = null,
                         previousPageToken: String? = null,
                         pageSize: String? = null,
                         startDate: String? = null,
-                        endDate: String? = null): Observable<List<Order>>
-    fun getExecutions(orderId: String): Observable<List<Execution>>
-    fun postOrder(order: NewOrder): Observable<Order>
+                        endDate: String? = null): AdapterObservable<List<Order>>
+    fun getExecutions(orderId: String): AdapterObservable<List<Execution>>
+    fun postOrder(order: NewOrder): AdapterObservable<Order>
 
-    fun getPing(): Observable<Ping>
+    fun getPing(): AdapterObservable<Ping>
 
     fun getOpenWithdrawals(status: WithdrawalStatus? = null,
-                           symbol: String? = null): Observable<List<Withdrawal>>
-    fun getWithdrawal(withdrawalId: String): Observable<Withdrawal>
-    fun getWithdrawals(txId: String): Observable<List<Withdrawal>>
-    fun deleteWithdrawal(withdrawalId: String): Observable<Withdrawal>
-    fun postWithdrawal(withdrawal: NewWithdrawal): Observable<Withdrawal>
+                           symbol: String? = null): AdapterObservable<List<Withdrawal>>
+    fun getWithdrawal(withdrawalId: String): AdapterObservable<Withdrawal>
+    fun getWithdrawals(txId: String): AdapterObservable<List<Withdrawal>>
+    fun deleteWithdrawal(withdrawalId: String): AdapterObservable<Withdrawal>
+    fun postWithdrawal(withdrawal: NewWithdrawal): AdapterObservable<Withdrawal>
     fun getClosedWithdrawals(status: WithdrawalStatus? = null,
                              symbol: String? = null,
                              nextPageToken: String? = null,
                              previousPageToken: String? = null,
                              pageSize: String? = null,
                              startDate: String? = null,
-                             endDate: String? = null): Observable<List<Withdrawal>>
-    fun getWhiteListedAddresses(): Observable<WhiteListAddress>
+                             endDate: String? = null): AdapterObservable<List<Withdrawal>>
+    fun getWhiteListedAddresses(): AdapterObservable<WhiteListAddress>
 }

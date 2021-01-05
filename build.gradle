@@ -1,0 +1,30 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "1.4.0"
+    id 'maven'
+    id 'java-library'
+}
+
+group "com.bushka.cryonomyadapt"
+version "1.1.1"
+
+repositories {
+    maven { url "https://jitpack.io" }
+    maven { url "https://clojars.org/repo" }
+    mavenCentral()
+}
+
+
+dependencies {
+    testImplementation "junit:junit:4.12"
+    testImplementation "io.mockk:mockk:1.9.3"
+    implementation "com.github.ColeKainz:bittrex-kotlin-client:master-SNAPSHOT"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.0"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
