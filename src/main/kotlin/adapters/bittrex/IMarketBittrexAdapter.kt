@@ -3,7 +3,7 @@ package adapters.bittrex
 import models.AdapterObservable
 import models.markets.*
 
-interface IMarketBittrexAdapter : IBittrexAdapterBase {
+internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
     override fun getMarkets(): AdapterObservable<List<Market>> {
         return client.markets.getMarkets().mapToAdapter { list ->
             list.map {

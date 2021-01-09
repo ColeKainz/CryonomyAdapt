@@ -4,7 +4,7 @@ import io.reactivex.Observable
 import models.AdapterObservable
 import models.balances.Balance
 
-interface IBalancesBittrexAdapter: IBittrexAdapterBase {
+internal interface IBalancesBittrexAdapter: IBittrexAdapterBase {
     override fun getBalances(): AdapterObservable<List<Balance>> {
         return client.balance.getBalances().mapToAdapter { list ->
             list.map {

@@ -4,7 +4,7 @@ import models.AdapterObservable
 import models.deposits.Deposit
 import models.deposits.DepositStatus
 
-interface IDepositsBittrexAdapter : IBittrexAdapterBase {
+internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
     override fun getOpenDeposits(status: DepositStatus?, symbol: String?): AdapterObservable<List<Deposit>> {
         return client.deposits.getOpenDeposits(status?.convert(), symbol).mapToAdapter { list ->
             list.map {

@@ -7,7 +7,7 @@ import models.addresses.AddressStatus
 import models.addresses.NewAddress
 import com.bushka.bittrex.model.addresses.NewAddress as BNewAddress
 
-interface IAddressesBittrexAdapter : IBittrexAdapterBase {
+internal interface IAddressesBittrexAdapter : IBittrexAdapterBase {
     override fun getAddresses(): AdapterObservable<List<Address>> {
         return client.addresses.getAddresses().mapToAdapter { list ->
             list.map {

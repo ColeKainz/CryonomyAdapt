@@ -6,7 +6,7 @@ import models.withdrawals.WhiteListAddress
 import models.withdrawals.Withdrawal
 import models.withdrawals.WithdrawalStatus
 
-interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
+internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     override fun getOpenWithdrawals(
         status: WithdrawalStatus?,
         symbol: String?

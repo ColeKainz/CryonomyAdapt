@@ -7,7 +7,7 @@ import models.conditionalorders.*
 import com.bushka.bittrex.model.conditionalorders.NewConditionalOrder as BNewConditionalOrder
 
 
-interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
+internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
     override fun getConditionalOrder(id: String): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.getConditionalOrder(id).mapToAdapter {
             ConditionalOrder(

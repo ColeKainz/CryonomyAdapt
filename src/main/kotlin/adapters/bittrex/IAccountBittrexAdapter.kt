@@ -5,7 +5,7 @@ import models.AdapterObservable
 import models.account.Account
 import models.account.AccountVolume
 
-interface IAccountBittrexAdapter: IBittrexAdapterBase {
+internal interface IAccountBittrexAdapter: IBittrexAdapterBase {
     override fun getAccount(): AdapterObservable<Account> {
         return client.account.getAccount().mapToAdapter {
             Account(it.subAccountId, it.accountId)

@@ -3,7 +3,7 @@ package adapters.bittrex
 import models.AdapterObservable
 import models.currencies.Currency
 
-interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
+internal interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
     override fun getCurrencies(): AdapterObservable<List<Currency>> {
         return client.currencies.getCurrencies().mapToAdapter { list ->
             list.map {

@@ -6,7 +6,7 @@ import models.deposits.DepositStatus
 import models.orders.Execution
 import models.orders.Order
 
-interface IOrdersBittrexAdapter : IBittrexAdapterBase {
+internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     override fun getOpenOrders(symbol: String?): AdapterObservable<List<Order>> {
         return client.orders.getOpenOrders(symbol).mapToAdapter { list ->
             list.map {
