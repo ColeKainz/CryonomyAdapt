@@ -1,11 +1,12 @@
 import adapters.bittrex.BittrexAdapter
-import com.bushka.bittrex.model.markets.Ticker
 import com.bushka.bittrex.network.BittrexObservable
 import factory.AdapterNotFoundException
 import factory.factories.KeyPassFactory
 import io.mockk.every
 import io.mockk.verify
 import io.reactivex.Observer
+import models.coin.Coin
+import models.coin.CoinPair
 import org.junit.Before
 import org.junit.Test
 
@@ -31,7 +32,7 @@ class BittrexTest {
             getSimpleBittrexObservable()
         }
 
-        adapter.getTicker("BTC-XMR")
+        adapter.getTicker(CoinPair(Coin("BTC"), Coin("XMR")))
         verify { bittrexAdapter.client.markets.getTicker("BTC-XMR") }
     }
 

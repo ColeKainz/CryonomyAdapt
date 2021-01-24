@@ -1,10 +1,11 @@
 package models.deposits
 
+import models.coin.Coin
 import java.math.BigDecimal
 
 data class Deposit (
         val id: String,
-        val currencySymbol: String,
+        val coin: Coin,
         val quantity: BigDecimal,
         val cryptoAddress: String,
         val cryptoAddressTag: String,

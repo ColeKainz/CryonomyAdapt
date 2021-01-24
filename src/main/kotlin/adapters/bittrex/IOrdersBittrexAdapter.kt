@@ -1,18 +1,19 @@
 package adapters.bittrex
 
 import models.AdapterObservable
+import models.coin.CoinPair
 import models.conditionalorders.NewOrder
 import models.deposits.DepositStatus
 import models.orders.Execution
 import models.orders.Order
 
 internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
-    override fun getOpenOrders(symbol: String?): AdapterObservable<List<Order>> {
-        return client.orders.getOpenOrders(symbol).mapToAdapter { list ->
+    override fun getOpenOrders(pair: CoinPair?): AdapterObservable<List<Order>> {
+        return client.orders.getOpenOrders(pair?.asString()).mapToAdapter { list ->
             list.map {
                 Order(
                     it.id,
-                    it.marketSymbol,
+                    it.marketSymbol.asPair(),
                     it.direction,
                     it.type,
                     it.quantity,
@@ -41,7 +42,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.orders.getOrder(orderId).mapToAdapter {
             Order(
                 it.id,
-                it.marketSymbol,
+                it.marketSymbol.asPair(),
                 it.direction,
                 it.type,
                 it.quantity,
@@ -65,7 +66,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.orders.deleteOrder(orderId).mapToAdapter {
             Order(
                 it.id,
-                it.marketSymbol,
+                it.marketSymbol.asPair(),
                 it.direction,
                 it.type,
                 it.quantity,
@@ -87,7 +88,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
 
     override fun getClosedOrders(
         status: DepositStatus?,
-        symbol: String?,
+        pair: CoinPair?,
         nextPageToken: String?,
         previousPageToken: String?,
         pageSize: String?,
@@ -96,7 +97,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
     ): AdapterObservable<List<Order>> {
         return client.orders.getClosedOrders(
             status?.convert(),
-            symbol,
+            pair?.asString(),
             nextPageToken,
             previousPageToken,
             pageSize,
@@ -106,7 +107,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
             list.map {
                 Order(
                     it.id,
-                    it.marketSymbol,
+                    it.marketSymbol.asPair(),
                     it.direction,
                     it.type,
                     it.quantity,
@@ -132,7 +133,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
             list.map {
                 Execution(
                     it.id,
-                    it.marketSymbol,
+                    it.marketSymbol.asPair(),
                     it.executedAt,
                     it.quantity,
                     it.rate,
@@ -148,7 +149,7 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.orders.postOrder(order.convert()).mapToAdapter {
             Order(
                 it.id,
-                it.marketSymbol,
+                it.marketSymbol.asPair(),
                 it.direction,
                 it.type,
                 it.quantity,

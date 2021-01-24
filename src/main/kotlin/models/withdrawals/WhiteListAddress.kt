@@ -1,7 +1,9 @@
 package models.withdrawals
 
+import models.coin.Coin
+
 data class WhiteListAddress (
-        val currencySymbol: String,
+        val coin: Coin,
         val createdAt: String,
         val status: WhiteListAddressStatus,
         val activeAt: String,

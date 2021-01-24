@@ -1,11 +1,12 @@
 package models.orders
 
+import models.coin.CoinPair
 import models.conditionalorders.NewCancelConditionalOrder
 import java.math.BigDecimal
 
 data class Order (
         val id: String,
-        val marketSymbol: String,
+        val pair: CoinPair,
         val direction: String,
         val type: String,
         val quantity: BigDecimal,

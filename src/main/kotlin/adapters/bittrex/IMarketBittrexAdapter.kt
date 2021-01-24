@@ -1,6 +1,7 @@
 package adapters.bittrex
 
 import models.AdapterObservable
+import models.coin.CoinPair
 import models.markets.*
 
 internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
@@ -8,7 +9,7 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         return client.markets.getMarkets().mapToAdapter { list ->
             list.map {
                 Market(
-                    it.symbol,
+                    it.symbol.asPair(),
                     it.baseCurrencySymbol,
                     it.quoteCurrencySymbol,
                     it.minTradeSize,
@@ -22,10 +23,10 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getMarket(symbol: String): AdapterObservable<Market> {
-        return client.markets.getMarket(symbol).mapToAdapter {
+    override fun getMarket(pair: CoinPair): AdapterObservable<Market> {
+        return client.markets.getMarket(pair.asString()).mapToAdapter {
             Market(
-                it.symbol,
+                it.symbol.asPair(),
                 it.baseCurrencySymbol,
                 it.quoteCurrencySymbol,
                 it.minTradeSize,
@@ -54,8 +55,8 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getMarketSummary(symbol: String): AdapterObservable<MarketSummary> {
-        return client.markets.getMarketSummary(symbol).mapToAdapter {
+    override fun getMarketSummary(pair: CoinPair): AdapterObservable<MarketSummary> {
+        return client.markets.getMarketSummary(pair.asString()).mapToAdapter {
             MarketSummary(
                 it.high,
                 it.low,
@@ -75,7 +76,7 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         return client.markets.getTickers().mapToAdapter { list ->
             list.map {
                 Ticker(
-                    it.symbol,
+                    it.symbol.asPair(),
                     it.lastTradeRate,
                     it.bidRate,
                     it.askRate
@@ -84,10 +85,10 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getTicker(symbol: String): AdapterObservable<Ticker> {
-        return socketClient.subscribeTicker(symbol).mapToAdapter {
+    override fun getTicker(pair: CoinPair): AdapterObservable<Ticker> {
+        return socketClient.subscribeTicker(pair.asString()).mapToAdapter {
             Ticker(
-                it.symbol,
+                it.symbol.asPair(),
                 it.lastTradeRate,
                 it.bidRate,
                 it.askRate
@@ -99,8 +100,8 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         return client.markets.checkTickers()
     }
 
-    override fun getOrderBook(symbol: String, depth: OrderBookDepth): AdapterObservable<OrderBook> {
-        return client.markets.getOrderBook(symbol, depth.convert()).mapToAdapter {
+    override fun getOrderBook(pair: CoinPair, depth: OrderBookDepth): AdapterObservable<OrderBook> {
+        return client.markets.getOrderBook(pair.asString(), depth.convert()).mapToAdapter {
             OrderBook(
                 it.bid.map { it.convert() },
                 it.ask.map { it.convert() }
@@ -110,12 +111,12 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
     }
 
 
-    override fun checkOrderBook(symbol: String, depth: OrderBookDepth) {
-        client.markets.checkOrderBook(symbol, depth.convert())
+    override fun checkOrderBook(pair: CoinPair, depth: OrderBookDepth) {
+        client.markets.checkOrderBook(pair.asString(), depth.convert())
     }
 
-    override fun getTrade(symbol: String): AdapterObservable<Trade> {
-        return client.markets.getTrade(symbol).mapToAdapter {
+    override fun getTrade(pair: CoinPair): AdapterObservable<Trade> {
+        return client.markets.getTrade(pair.asString()).mapToAdapter {
             Trade(
                 it.id,
                 it.executedAt,
@@ -126,8 +127,8 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun checkTrade(symbol: String): AdapterObservable<Trade> {
-        return client.markets.checkTrade(symbol).mapToAdapter {
+    override fun checkTrade(pair: CoinPair): AdapterObservable<Trade> {
+        return client.markets.checkTrade(pair.asString()).mapToAdapter {
             Trade(
                 it.id,
                 it.executedAt,
@@ -138,8 +139,8 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getRecentCandles(symbol: String, candleInterval: CandleInterval): AdapterObservable<List<Candle>> {
-        return client.markets.getRecentCandles(symbol, candleInterval.convert()).mapToAdapter { list ->
+    override fun getRecentCandles(pair: CoinPair, candleInterval: CandleInterval): AdapterObservable<List<Candle>> {
+        return client.markets.getRecentCandles(pair.asString(), candleInterval.convert()).mapToAdapter { list ->
             list.map {
                 Candle(
                     it.startsAt,
@@ -154,18 +155,18 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun checkRecentCandles(symbol: String, candleInterval: CandleInterval) {
-        client.markets.checkRecentCandles(symbol, candleInterval.convert())
+    override fun checkRecentCandles(pair: CoinPair, candleInterval: CandleInterval) {
+        client.markets.checkRecentCandles(pair.asString(), candleInterval.convert())
     }
 
     override fun getCandles(
-        symbol: String,
+        pair: CoinPair,
         candleInterval: CandleInterval,
         year: Int,
         month: Int,
         day: Int
     ): AdapterObservable<List<Candle>> {
-        return client.markets.getCandles(symbol, candleInterval.convert(), year, month, day).mapToAdapter { list ->
+        return client.markets.getCandles(pair.asString(), candleInterval.convert(), year, month, day).mapToAdapter { list ->
             list.map {
                 Candle(
                     it.startsAt,

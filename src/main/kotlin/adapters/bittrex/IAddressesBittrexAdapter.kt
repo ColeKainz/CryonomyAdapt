@@ -5,6 +5,7 @@ import com.bushka.bittrex.model.addresses.AddressStatus as BAddressStatus
 import models.addresses.Address
 import models.addresses.AddressStatus
 import models.addresses.NewAddress
+import models.coin.Coin
 import com.bushka.bittrex.model.addresses.NewAddress as BNewAddress
 
 internal interface IAddressesBittrexAdapter : IBittrexAdapterBase {
@@ -16,13 +17,13 @@ internal interface IAddressesBittrexAdapter : IBittrexAdapterBase {
                     BAddressStatus.PROVISIONED -> AddressStatus.PROVISIONED
                 }
 
-                Address(status, it.currencySymbol, it.cryptoAddress, it.cryptoAddressTag)
+                Address(status, it.currencySymbol.asCoin(), it.cryptoAddress, it.cryptoAddressTag)
             }
         }
     }
 
     override fun putAddresses(address: NewAddress): AdapterObservable<List<Address>> {
-        val bNewAddress = BNewAddress(address.currencySymbol)
+        val bNewAddress = BNewAddress(address.coin.symbol)
 
         return client.addresses.putAddresses(bNewAddress).mapToAdapter { list ->
             list.map {
@@ -31,19 +32,19 @@ internal interface IAddressesBittrexAdapter : IBittrexAdapterBase {
                     BAddressStatus.PROVISIONED -> AddressStatus.PROVISIONED
                 }
 
-                Address(status, it.currencySymbol, it.cryptoAddress, it.cryptoAddressTag)
+                Address(status, it.currencySymbol.asCoin(), it.cryptoAddress, it.cryptoAddressTag)
             }
         }
     }
 
-    override fun getAddresses(symbol: String): AdapterObservable<Address> {
-        return client.addresses.getAddresses(symbol).mapToAdapter {
+    override fun getAddresses(coin: Coin): AdapterObservable<Address> {
+        return client.addresses.getAddresses(coin.symbol).mapToAdapter {
             val status = when (it.status) {
                 BAddressStatus.REQUESTED -> AddressStatus.REQUESTED
                 BAddressStatus.PROVISIONED -> AddressStatus.PROVISIONED
             }
 
-            Address(status, it.currencySymbol, it.cryptoAddress, it.cryptoAddressTag)
+            Address(status, it.currencySymbol.asCoin(), it.cryptoAddress, it.cryptoAddressTag)
         }
     }
 }

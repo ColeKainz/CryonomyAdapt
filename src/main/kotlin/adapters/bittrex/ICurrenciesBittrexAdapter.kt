@@ -1,6 +1,7 @@
 package adapters.bittrex
 
 import models.AdapterObservable
+import models.coin.Coin
 import models.currencies.Currency
 
 internal interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
@@ -8,7 +9,7 @@ internal interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
         return client.currencies.getCurrencies().mapToAdapter { list ->
             list.map {
                 Currency(
-                    it.symbol,
+                    it.symbol.asCoin(),
                     it.name,
                     it.coinType,
                     it.status.convert(),
@@ -23,10 +24,10 @@ internal interface ICurrenciesBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun getCurrency(symbol: String): AdapterObservable<Currency> {
-        return client.currencies.getCurrency(symbol).mapToAdapter {
+    override fun getCurrency(coin: Coin): AdapterObservable<Currency> {
+        return client.currencies.getCurrency(coin.symbol).mapToAdapter {
             Currency(
-                it.symbol,
+                it.symbol.asCoin(),
                 it.name,
                 it.coinType,
                 it.status.convert(),

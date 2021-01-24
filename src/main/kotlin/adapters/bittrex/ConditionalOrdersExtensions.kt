@@ -18,7 +18,7 @@ import models.conditionalorders.*
 
 fun BNewOrder.convert(): NewOrder {
     return NewOrder(
-        marketSymbol = this.marketSymbol,
+        pair = this.marketSymbol.asPair(),
         direction = this.direction.convert(),
         type = this.type.convert(),
         quantity = this.quantity,
@@ -32,7 +32,7 @@ fun BNewOrder.convert(): NewOrder {
 
 fun NewOrder.convert(): BNewOrder {
     return com.bushka.bittrex.model.conditionalorders.NewOrder(
-        marketSymbol = this.marketSymbol,
+        marketSymbol = this.pair.asString(),
         direction = this.direction.convert(),
         type = this.type.convert(),
         quantity = this.quantity,

@@ -2,6 +2,7 @@ package adapters.bittrex
 
 
 import models.AdapterObservable
+import models.coin.CoinPair
 import models.conditionalorders.*
 
 import com.bushka.bittrex.model.conditionalorders.NewConditionalOrder as BNewConditionalOrder
@@ -12,7 +13,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.conditionalOrders.getConditionalOrder(id).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
-                marketSymbol = it.marketSymbol,
+                pair = it.marketSymbol.asPair(),
                 operand = it.operand.convert(),
                 triggerPrice = it.triggerPrice,
                 trailingStopPercent = it.trailingStopPercent,
@@ -33,7 +34,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.conditionalOrders.deleteConditionalOrder(id).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
-                marketSymbol = it.marketSymbol,
+                pair = it.marketSymbol.asPair(),
                 operand = it.operand.convert(),
                 triggerPrice = it.triggerPrice,
                 trailingStopPercent = it.trailingStopPercent,
@@ -51,7 +52,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun closeConditionalOrder(
-        symbol: String?,
+        pair: CoinPair?,
         nextPageToken: String?,
         previousPageToken: String?,
         pageSize: String?,
@@ -59,7 +60,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         endDate: String
     ): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.closeConditionalOrder(
-            symbol,
+            pair?.asString(),
             nextPageToken,
             previousPageToken,
             pageSize,
@@ -68,7 +69,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         ).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
-                marketSymbol = it.marketSymbol,
+                pair = it.marketSymbol.asPair(),
                 operand = it.operand.convert(),
                 triggerPrice = it.triggerPrice,
                 trailingStopPercent = it.trailingStopPercent,
@@ -85,11 +86,11 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun openConditionalOrder(symbol: String?): AdapterObservable<ConditionalOrder> {
-        return client.conditionalOrders.openConditionalOrder(symbol).mapToAdapter {
+    override fun openConditionalOrder(pair: CoinPair?): AdapterObservable<ConditionalOrder> {
+        return client.conditionalOrders.openConditionalOrder(pair?.asString()).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
-                marketSymbol = it.marketSymbol,
+                pair = it.marketSymbol.asPair(),
                 operand = it.operand.convert(),
                 triggerPrice = it.triggerPrice,
                 trailingStopPercent = it.trailingStopPercent,
@@ -109,7 +110,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
     override fun postConditionalOrder(newConditionalOrder: NewConditionalOrder): AdapterObservable<ConditionalOrder> {
         val newOrder = BNewConditionalOrder(
             id = newConditionalOrder.id,
-            marketSymbol = newConditionalOrder.marketSymbol,
+            marketSymbol = newConditionalOrder.pair.asString(),
             operand = newConditionalOrder.operand.convert(),
             triggerPrice = newConditionalOrder.triggerPrice,
             trailingStopPercent = newConditionalOrder.trailingStopPercent,
@@ -122,7 +123,7 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         return client.conditionalOrders.postConditionalOrder(newOrder).mapToAdapter {
             ConditionalOrder(
                 id = it.id,
-                marketSymbol = it.marketSymbol,
+                pair = it.marketSymbol.asPair(),
                 operand = it.operand.convert(),
                 triggerPrice = it.triggerPrice,
                 trailingStopPercent = it.trailingStopPercent,

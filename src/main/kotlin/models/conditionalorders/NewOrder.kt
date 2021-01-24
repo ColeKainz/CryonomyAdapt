@@ -1,9 +1,10 @@
 package models.conditionalorders
 
+import models.coin.CoinPair
 import java.math.BigDecimal
 
 data class NewOrder (
-        val marketSymbol: String,
+        val pair: CoinPair,
         val direction: ConditionalOrderDirection,
         val type: ConditionalOrderNewOrderType,
         val quantity: BigDecimal,

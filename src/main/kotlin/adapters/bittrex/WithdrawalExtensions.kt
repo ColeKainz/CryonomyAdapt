@@ -33,7 +33,7 @@ fun BWithdrawalStatus.convert(): WithdrawalStatus {
 
 fun NewWithdrawal.convert(): BNewWithdrawal {
     return BNewWithdrawal(
-        this.currencySymbol,
+        this.coin.symbol,
         this.quantity,
         this.cryptoAddress,
         this.cryptoAddressTag

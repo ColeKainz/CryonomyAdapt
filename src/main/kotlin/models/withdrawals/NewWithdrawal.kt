@@ -1,9 +1,10 @@
 package models.withdrawals
 
+import models.coin.Coin
 import java.math.BigDecimal
 
 data class NewWithdrawal (
-        val currencySymbol: String,
+        val coin: Coin,
         val quantity: BigDecimal,
         val cryptoAddress: String,
         val cryptoAddressTag: String

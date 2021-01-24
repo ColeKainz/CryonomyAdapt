@@ -1,6 +1,7 @@
 package adapters.bittrex
 
 import models.AdapterObservable
+import models.coin.Coin
 import models.withdrawals.NewWithdrawal
 import models.withdrawals.WhiteListAddress
 import models.withdrawals.Withdrawal
@@ -9,13 +10,13 @@ import models.withdrawals.WithdrawalStatus
 internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     override fun getOpenWithdrawals(
         status: WithdrawalStatus?,
-        symbol: String?
+        coin: Coin?
     ): AdapterObservable<List<Withdrawal>> {
-        return client.withdrawal.getOpenWithdrawals(status?.convert(), symbol).mapToAdapter { list ->
+        return client.withdrawal.getOpenWithdrawals(status?.convert(), coin?.symbol).mapToAdapter { list ->
             list.map {
                 Withdrawal(
                     it.id,
-                    it.currencySymbol,
+                    it.currencySymbol.asCoin(),
                     it.quantity,
                     it.cryptoAddress,
                     it.cryptoAddressTag,
@@ -33,7 +34,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
         return client.withdrawal.getWithdrawal(withdrawalId).mapToAdapter {
             Withdrawal(
                 it.id,
-                it.currencySymbol,
+                it.currencySymbol.asCoin(),
                 it.quantity,
                 it.cryptoAddress,
                 it.cryptoAddressTag,
@@ -51,7 +52,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
             list.map {
                 Withdrawal(
                     it.id,
-                    it.currencySymbol,
+                    it.currencySymbol.asCoin(),
                     it.quantity,
                     it.cryptoAddress,
                     it.cryptoAddressTag,
@@ -69,7 +70,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
         return client.withdrawal.getWithdrawal(withdrawalId).mapToAdapter {
             Withdrawal(
                 it.id,
-                it.currencySymbol,
+                it.currencySymbol.asCoin(),
                 it.quantity,
                 it.cryptoAddress,
                 it.cryptoAddressTag,
@@ -86,7 +87,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
         return client.withdrawal.postWithdrawal(withdrawal.convert()).mapToAdapter {
             Withdrawal(
                 it.id,
-                it.currencySymbol,
+                it.currencySymbol.asCoin(),
                 it.quantity,
                 it.cryptoAddress,
                 it.cryptoAddressTag,
@@ -101,7 +102,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
 
     override fun getClosedWithdrawals(
         status: WithdrawalStatus?,
-        symbol: String?,
+        coin: Coin?,
         nextPageToken: String?,
         previousPageToken: String?,
         pageSize: String?,
@@ -110,7 +111,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     ): AdapterObservable<List<Withdrawal>> {
         return client.withdrawal.getClosedWithdrawals(
             status?.convert(),
-            symbol,
+            coin?.symbol,
             nextPageToken,
             previousPageToken,
             pageSize,
@@ -120,7 +121,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
             list.map {
                 Withdrawal(
                     it.id,
-                    it.currencySymbol,
+                    it.currencySymbol.asCoin(),
                     it.quantity,
                     it.cryptoAddress,
                     it.cryptoAddressTag,
@@ -137,7 +138,7 @@ internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
     override fun getWhiteListedAddresses(): AdapterObservable<WhiteListAddress> {
         return client.withdrawal.getWhiteListedAddresses().mapToAdapter {
             WhiteListAddress(
-                it.currencySymbol,
+                it.currencySymbol.asCoin(),
                 it.createdAt,
                 it.status.convert(),
                 it.activeAt,

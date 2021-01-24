@@ -1,14 +1,14 @@
 package adapters.bittrex
 
-import io.reactivex.Observable
 import models.AdapterObservable
 import models.balances.Balance
+import models.coin.Coin
 
 internal interface IBalancesBittrexAdapter: IBittrexAdapterBase {
     override fun getBalances(): AdapterObservable<List<Balance>> {
         return client.balance.getBalances().mapToAdapter { list ->
             list.map {
-                Balance(it.currencySymbol, it.total, it.available, it.updatedAt)
+                Balance(it.currencySymbol.asCoin(), it.total, it.available, it.updatedAt)
             }
         }
     }
@@ -17,10 +17,10 @@ internal interface IBalancesBittrexAdapter: IBittrexAdapterBase {
         client.balance.checkBalances()
     }
 
-    override fun getBalances(symbol: String): AdapterObservable<List<Balance>> {
-        return client.balance.getBalances(symbol).mapToAdapter { list ->
+    override fun getBalances(coin: Coin): AdapterObservable<List<Balance>> {
+        return client.balance.getBalances(coin.symbol).mapToAdapter { list ->
             list.map {
-                Balance(it.currencySymbol, it.total, it.available, it.updatedAt)
+                Balance(it.currencySymbol.asCoin(), it.total, it.available, it.updatedAt)
             }
         }
     }

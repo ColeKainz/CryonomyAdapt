@@ -1,9 +1,10 @@
 package models.markets
 
+import models.coin.CoinPair
 import java.math.BigDecimal
 
 data class Market (
-        val symbol: String,
+        val pair: CoinPair,
         val baseCurrencySymbol: String,
         val quoteCurrencySymbol: String,
         val minTradeSize: BigDecimal,

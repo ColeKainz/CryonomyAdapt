@@ -1,16 +1,17 @@
 package adapters.bittrex
 
 import models.AdapterObservable
+import models.coin.Coin
 import models.deposits.Deposit
 import models.deposits.DepositStatus
 
 internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
-    override fun getOpenDeposits(status: DepositStatus?, symbol: String?): AdapterObservable<List<Deposit>> {
-        return client.deposits.getOpenDeposits(status?.convert(), symbol).mapToAdapter { list ->
+    override fun getOpenDeposits(coin: Coin?, status: DepositStatus?): AdapterObservable<List<Deposit>> {
+        return client.deposits.getOpenDeposits(status?.convert(), coin?.symbol).mapToAdapter { list ->
             list.map {
                 Deposit(
                     it.id,
-                    it.currencySymbol,
+                    it.currencySymbol.asCoin(),
                     it.quantity,
                     it.cryptoAddress,
                     it.cryptoAddressTag,
@@ -31,7 +32,7 @@ internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
 
     override fun getClosedDeposits(
         status: DepositStatus?,
-        symbol: String?,
+        coin: Coin?,
         nextPageToken: String?,
         previousPageToken: String?,
         pageSize: String?,
@@ -40,7 +41,7 @@ internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
     ): AdapterObservable<List<Deposit>> {
         return client.deposits.getClosedDeposits(
             status?.convert(),
-            symbol,
+            coin?.symbol,
             nextPageToken,
             previousPageToken,
             pageSize,
@@ -50,7 +51,7 @@ internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
             list.map {
                 Deposit(
                     it.id,
-                    it.currencySymbol,
+                    it.currencySymbol.asCoin(),
                     it.quantity,
                     it.cryptoAddress,
                     it.cryptoAddressTag,
@@ -70,7 +71,7 @@ internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
             list.map {
                 Deposit(
                     it.id,
-                    it.currencySymbol,
+                    it.currencySymbol.asCoin(),
                     it.quantity,
                     it.cryptoAddress,
                     it.cryptoAddressTag,
@@ -89,7 +90,7 @@ internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
         return client.deposits.getDeposit(depositId).mapToAdapter {
             Deposit(
                 it.id,
-                it.currencySymbol,
+                it.currencySymbol.asCoin(),
                 it.quantity,
                 it.cryptoAddress,
                 it.cryptoAddressTag,

@@ -1,10 +1,11 @@
 package models.orders
 
+import models.coin.CoinPair
 import java.math.BigDecimal
 
 data class Execution (
         val id: String,
-        val marketSymbol: String,
+        val pair: CoinPair,
         val executedAt: String,
         val quantity: BigDecimal,
         val rate: BigDecimal,
