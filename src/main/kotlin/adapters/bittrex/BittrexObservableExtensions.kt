@@ -4,11 +4,23 @@ import com.bushka.bittrex.network.BittrexObservable
 import io.reactivex.Observable
 import models.ResponseException
 import retrofit2.HttpException
+import retrofit2.Response
 
-fun <O, R> BittrexObservable<O>.mapToAdapter(mapper: (O) -> R): Observable<R> {
+/**
+ * Map the Bittrex response to the adapter. Throw an error if the response isn't successful.
+ * This will force the error to [onFailure], rather than leaving it to be handled in [onSuccess].
+ */
+fun <O, R> BittrexObservable<Response<O>>.mapToAdapter(mapper: (O) -> R): Observable<R> {
     return this.map {
+        if (!it.isSuccessful) {
+            throw ResponseException(
+                it.code(),
+                it.message()
+            )
+        }
+
         try {
-            mapper(it)
+            mapper(it.body()!!)
         } catch (e: HttpException) {
             throw ResponseException(
                 e.code(),

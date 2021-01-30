@@ -86,7 +86,7 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
     }
 
     override fun getTicker(pair: CoinPair): AdapterObservable<Ticker> {
-        return socketClient.subscribeTicker(pair.asString()).mapToAdapter {
+        return client.markets.getTicker(pair.asString()).mapToAdapter {
             Ticker(
                 it.symbol.asPair(),
                 it.lastTradeRate,
@@ -109,7 +109,6 @@ internal interface IMarketBittrexAdapter : IBittrexAdapterBase {
         }
 
     }
-
 
     override fun checkOrderBook(pair: CoinPair, depth: OrderBookDepth) {
         client.markets.checkOrderBook(pair.asString(), depth.convert())
