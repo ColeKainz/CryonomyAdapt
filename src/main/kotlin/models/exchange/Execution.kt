@@ -1,4 +1,4 @@
-package models.orders
+package models.exchange
 
 import models.coin.CoinPair
 import java.math.BigDecimal

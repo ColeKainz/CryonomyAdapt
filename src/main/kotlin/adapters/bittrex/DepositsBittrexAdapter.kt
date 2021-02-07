@@ -5,7 +5,7 @@ import models.coin.Coin
 import models.deposits.Deposit
 import models.deposits.DepositStatus
 
-internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
+internal interface DepositsBittrexAdapter : BittrexAdapterBase {
     override fun getOpenDeposits(coin: Coin?, status: DepositStatus?): AdapterObservable<List<Deposit>> {
         return client.deposits.getOpenDeposits(status?.convert(), coin?.symbol).mapToAdapter { list ->
             list.map {
@@ -26,8 +26,32 @@ internal interface IDepositsBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun checkOpenDeposits() {
-        client.deposits.checkOpenDeposits()
+    override fun subscribeOpenDeposits(coin: Coin?, status: DepositStatus?): AdapterObservable<Deposit> {
+        val handler = SyncHandler(
+            { client.deposits.checkOpenDeposits().sequence },
+            { socketClient.subscribeDeposit() }
+        )
+
+        return handler.handle().mapStreamToAdapter { depositDelta ->
+            val deposit = depositDelta.delta
+            Deposit(
+                deposit.id,
+                deposit.currencySymbol.asCoin(),
+                deposit.quantity,
+                deposit.cryptoAddress,
+                deposit.cryptoAddressTag,
+                deposit.txId,
+                deposit.confirmations,
+                deposit.updatedAt,
+                deposit.completedAt,
+                deposit.status.convert(),
+                deposit.source.convert()
+            )
+        }
+    }
+
+    override fun checkOpenDeposits(): AdapterObservable<Unit> {
+        return client.deposits.checkOpenDeposits().map { }
     }
 
     override fun getClosedDeposits(

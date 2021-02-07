@@ -29,3 +29,19 @@ fun <O, R> BittrexObservable<Response<O>>.mapToAdapter(mapper: (O) -> R): Observ
         }
     }
 }
+
+fun <O, R> BittrexObservable<O>.mapStreamToAdapter(mapper: (O) -> R): Observable<R> {
+    return this.map {
+        try {
+            return@map mapper(it)
+        } catch (e: HttpException) {
+            throw ResponseException(
+                e.code(),
+                e.message()
+            )
+        }
+    }
+}
+
+val <T> BittrexObservable<Response<T>>.sequence: Int
+    get() = this.blockingFirst().headers().get("Sequence")!!.toInt()

@@ -4,10 +4,10 @@ import models.AdapterObservable
 import models.coin.CoinPair
 import models.conditionalorders.NewOrder
 import models.deposits.DepositStatus
-import models.orders.Execution
+import models.exchange.Execution
 import models.orders.Order
 
-internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
+internal interface OrdersBittrexAdapter : BittrexAdapterBase {
     override fun getOpenOrders(pair: CoinPair?): AdapterObservable<List<Order>> {
         return client.orders.getOpenOrders(pair?.asString()).mapToAdapter { list ->
             list.map {
@@ -34,8 +34,38 @@ internal interface IOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
-    override fun checkOpenOrders() {
-        return client.orders.checkOpenOrders()
+    override fun subscribeOpenOrders(): AdapterObservable<Order> {
+        val handler = SyncHandler(
+            { client.orders.checkOpenOrders().sequence },
+            { socketClient.subscribeOrder() }
+        )
+
+        return handler.handle().mapStreamToAdapter { orderDelta ->
+            val order = orderDelta.delta
+            Order(
+                order.id,
+                order.marketSymbol.asPair(),
+                order.direction,
+                order.type,
+                order.quantity,
+                order.limit,
+                order.ceiling,
+                order.timeInForce,
+                order.clientOrderId,
+                order.fillQuantity,
+                order.commission,
+                order.proceeds,
+                order.status,
+                order.createdAt,
+                order.updatedAt,
+                order.closedAt,
+                order.orderToCancel.convert()
+            )
+        }
+    }
+
+    override fun checkOpenOrders(): AdapterObservable<Unit> {
+        return client.orders.checkOpenOrders().map { }
     }
 
     override fun getOrder(orderId: String): AdapterObservable<Order> {

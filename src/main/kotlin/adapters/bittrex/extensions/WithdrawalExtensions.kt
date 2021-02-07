@@ -1,4 +1,4 @@
-package adapters.bittrex
+package adapters.bittrex.extensions
 
 import models.withdrawals.NewWithdrawal
 import models.withdrawals.WhiteListAddressStatus

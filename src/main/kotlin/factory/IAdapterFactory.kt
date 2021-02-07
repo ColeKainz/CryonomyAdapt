@@ -1,7 +1,7 @@
 package factory
 
-import ICryonomyAdapter
+import CryonomyAdapter
 
 interface IAdapterFactory {
-    fun create(): ICryonomyAdapter
+    fun create(): CryonomyAdapter
 }

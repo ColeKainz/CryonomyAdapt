@@ -1,10 +1,10 @@
 package adapters.bittrex
 
-import ICryonomyAdapter
+import CryonomyAdapter
 import com.bushka.bittrex.BittrexClient
 import com.bushka.bittrex.services.SocketSubscriptionService
 
-internal interface IBittrexAdapterBase: ICryonomyAdapter {
+internal interface BittrexAdapterBase: CryonomyAdapter {
     val client: BittrexClient
     val socketClient: SocketSubscriptionService
 }

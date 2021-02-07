@@ -32,7 +32,7 @@ class BittrexTest {
             getSimpleBittrexObservable()
         }
 
-        adapter.getTicker(CoinPair(Coin("BTC"), Coin("XMR")))
+        adapter.subscribeTicker(CoinPair(Coin("BTC"), Coin("XMR")))
         verify { bittrexAdapter.client.markets.getTicker("BTC-XMR") }
     }
 

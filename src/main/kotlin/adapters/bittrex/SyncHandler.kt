@@ -1,17 +1,14 @@
 package adapters.bittrex
 
+import com.bushka.bittrex.model.sockets.Sequenced
 import com.bushka.bittrex.network.BittrexObservable
 import io.reactivex.Observable
-
-interface dummy {
-    val sequence: Int
-}
 
 /**
  * This follows the synchronizing guidelines provided by the Bittrex Api. The steps laid out in the guidelines are explained
  * throughout the [handle] function. Step 6 is removed as it is deemed useless to return the result of the rest call.
  */
-class SyncHandler<T: dummy>(private val getBlockingRestSequence: () -> Int, private val getStream: () -> BittrexObservable<T>) {
+class SyncHandler<T: Sequenced>(private val getBlockingRestSequence: () -> Int, private val getStream: () -> BittrexObservable<T>) {
     fun handle(): Observable<T> {
         // 1. Subscribe to the relevant socket streams.
         // 2. Begin to queue up messages without processing them.

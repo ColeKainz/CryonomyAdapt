@@ -1,11 +1,10 @@
 package adapters.bittrex
 
-import io.reactivex.Observable
 import models.AdapterObservable
 import models.account.Account
 import models.account.AccountVolume
 
-internal interface IAccountBittrexAdapter: IBittrexAdapterBase {
+internal interface AccountBittrexAdapter: BittrexAdapterBase {
     override fun getAccount(): AdapterObservable<Account> {
         return client.account.getAccount().mapToAdapter {
             Account(it.subAccountId, it.accountId)

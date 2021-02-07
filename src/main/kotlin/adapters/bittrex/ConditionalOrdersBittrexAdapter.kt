@@ -8,7 +8,7 @@ import models.conditionalorders.*
 import com.bushka.bittrex.model.conditionalorders.NewConditionalOrder as BNewConditionalOrder
 
 
-internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
+internal interface ConditionalOrdersBittrexAdapter : BittrexAdapterBase {
     override fun getConditionalOrder(id: String): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.getConditionalOrder(id).mapToAdapter {
             ConditionalOrder(
@@ -86,6 +86,10 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
         }
     }
 
+    override fun checkConditionalOrder(): AdapterObservable<Unit> {
+        return client.conditionalOrders.checkConditionalOrder().map { }
+    }
+
     override fun openConditionalOrder(pair: CoinPair?): AdapterObservable<ConditionalOrder> {
         return client.conditionalOrders.openConditionalOrder(pair?.asString()).mapToAdapter {
             ConditionalOrder(
@@ -103,6 +107,33 @@ internal interface IConditionalOrdersBittrexAdapter : IBittrexAdapterBase {
                 createdAt = it.createdAt,
                 updatedAt = it.updatedAt,
                 closedAt = it.closedAt,
+            )
+        }
+    }
+
+    override fun subscribeOpenConditionalOrder(pair: CoinPair?): AdapterObservable<ConditionalOrder> {
+        val handler = SyncHandler(
+            { client.conditionalOrders.openConditionalOrder(pair?.asString()).sequence },
+            { socketClient.subscribeConditionalOrder() }
+        )
+
+        return handler.handle().mapStreamToAdapter { conditionalOrderDelta ->
+            val order = conditionalOrderDelta.delta
+            ConditionalOrder(
+                id = order.id,
+                pair = order.marketSymbol.asPair(),
+                operand = order.operand.convert(),
+                triggerPrice = order.triggerPrice,
+                trailingStopPercent = order.trailingStopPercent,
+                createdOrderId = order.createdOrderId,
+                orderToCreate = order.orderToCreate.convert(),
+                orderToCancel = order.orderToCancel.convert(),
+                clientConditionalOrderId = order.clientConditionalOrderId,
+                status = order.status.convert(),
+                orderCreationErrorCode = order.orderCreationErrorCode,
+                createdAt = order.createdAt,
+                updatedAt = order.updatedAt,
+                closedAt = order.closedAt,
             )
         }
     }

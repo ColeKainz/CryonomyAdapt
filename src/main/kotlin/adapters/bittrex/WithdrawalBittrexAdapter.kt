@@ -1,5 +1,6 @@
 package adapters.bittrex
 
+import adapters.bittrex.extensions.convert
 import models.AdapterObservable
 import models.coin.Coin
 import models.withdrawals.NewWithdrawal
@@ -7,7 +8,7 @@ import models.withdrawals.WhiteListAddress
 import models.withdrawals.Withdrawal
 import models.withdrawals.WithdrawalStatus
 
-internal interface IWithdrawalBittrexAdapter : IBittrexAdapterBase {
+internal interface WithdrawalBittrexAdapter : BittrexAdapterBase {
     override fun getOpenWithdrawals(
         status: WithdrawalStatus?,
         coin: Coin?
