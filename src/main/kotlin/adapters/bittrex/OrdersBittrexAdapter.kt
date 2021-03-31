@@ -36,7 +36,7 @@ internal interface OrdersBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeOpenOrders(): AdapterObservable<Order> {
         val handler = SyncHandler(
-            { client.orders.checkOpenOrders().sequence },
+            { client.orders.checkOpenOrders() },
             { socketClient.subscribeOrder() }
         )
 

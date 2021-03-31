@@ -30,7 +30,7 @@ internal interface BalancesBittrexAdapter: BittrexAdapterBase {
 
     override fun subscribeBalance(coin: Coin): AdapterObservable<Balance> {
         val handler = SyncHandler(
-            { client.balance.checkBalances().sequence },
+            { client.balance.checkBalances() },
             { socketClient.subscribeBalance() }
         )
 

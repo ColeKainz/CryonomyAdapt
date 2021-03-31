@@ -2,14 +2,16 @@ package adapters.bittrex
 
 import com.bushka.bittrex.model.sockets.Sequenced
 import com.bushka.bittrex.network.BittrexObservable
+import com.bushka.bittrex.network.onFailure
 import io.reactivex.Observable
+import retrofit2.Response
 
 /**
  * This follows the synchronizing guidelines provided by the Bittrex Api. The steps laid out in the guidelines are explained
  * throughout the [handle] function. Step 6 is removed as it is deemed useless to return the result of the rest call.
  */
-class SyncHandler<T: Sequenced>(private val getBlockingRestSequence: () -> Int, private val getStream: () -> BittrexObservable<T>) {
-    fun handle(): Observable<T> {
+class SyncHandler<T: Any, R: Sequenced>(private val getBlockingRestSequence: () -> BittrexObservable<Response<T>>, private val getStream: () -> BittrexObservable<R>) {
+    fun handle(): Observable<R> {
         // 1. Subscribe to the relevant socket streams.
         // 2. Begin to queue up messages without processing them.
         val streamResponse = getStream()
@@ -20,9 +22,12 @@ class SyncHandler<T: Sequenced>(private val getBlockingRestSequence: () -> Int, 
         // results and the value of the returned sequence header.
         // Refer to the descriptions of individual streams to find
         // the corresponding REST API.
-        var sequence = getBlockingRestSequence()
+        val sequenceObservable = getBlockingRestSequence()
+        var sequence = sequenceObservable.sequence
 
         return streamResponse.skipWhile {
+            sequenceObservable.onFailure { error -> throw error }
+
             // 7. Continue to apply messages as they are received
             // from the socket as long as sequence number on the
             // stream is always increasing by 1 each message
@@ -40,7 +45,7 @@ class SyncHandler<T: Sequenced>(private val getBlockingRestSequence: () -> Int, 
             // (unlikely), discard the results of step 3 and then
             // repeat step 3 until this check passes.
             while (sequence < firstSteamSequence!!) {
-                sequence = getBlockingRestSequence()
+                sequence = getBlockingRestSequence().sequence
             }
 
             previousSequence = it.sequence

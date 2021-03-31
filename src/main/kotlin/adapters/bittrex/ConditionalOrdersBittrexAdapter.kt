@@ -113,7 +113,7 @@ internal interface ConditionalOrdersBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeOpenConditionalOrder(pair: CoinPair?): AdapterObservable<ConditionalOrder> {
         val handler = SyncHandler(
-            { client.conditionalOrders.openConditionalOrder(pair?.asString()).sequence },
+            { client.conditionalOrders.openConditionalOrder(pair?.asString()) },
             { socketClient.subscribeConditionalOrder() }
         )
 

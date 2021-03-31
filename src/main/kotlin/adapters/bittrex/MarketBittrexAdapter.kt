@@ -61,7 +61,7 @@ internal interface MarketBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeMarketSummaries(): AdapterObservable<List<MarketSummary>> {
         val handler = SyncHandler(
-            { client.markets.checkMarketSummaries().sequence },
+            { client.markets.checkMarketSummaries() },
             { socketClient.subscribeMarketSummaries() }
         )
 
@@ -125,7 +125,7 @@ internal interface MarketBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeTickers(): AdapterObservable<List<Ticker>> {
         val handler = SyncHandler(
-            { client.markets.checkTickers().sequence },
+            { client.markets.checkTickers() },
             { socketClient.subscribeTickers() }
         )
 
@@ -174,7 +174,7 @@ internal interface MarketBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeOrderBook(pair: CoinPair, depth: OrderBookDepth): AdapterObservable<OrderBookDelta> {
         val handler = SyncHandler(
-            { client.markets.checkOrderBook(pair.asString(), depth.convert()).sequence },
+            { client.markets.checkOrderBook(pair.asString(), depth.convert()) },
             { socketClient.subscribeOrderBook(pair.asString(), depth.value.toString()) }
         )
 
@@ -206,7 +206,7 @@ internal interface MarketBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeTrades(pair: CoinPair): AdapterObservable<List<Trade>> {
         val handler = SyncHandler(
-            { client.markets.checkTrade(pair.asString()).sequence },
+            { client.markets.checkTrade(pair.asString()) },
             { socketClient.subscribeTrade(pair.asString()) }
         )
 
@@ -246,7 +246,7 @@ internal interface MarketBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeRecentCandle(pair: CoinPair, candleInterval: CandleInterval): AdapterObservable<Candle> {
         val handler = SyncHandler(
-            { client.markets.checkRecentCandles(pair.asString(), candleInterval.convert()).sequence },
+            { client.markets.checkRecentCandles(pair.asString(), candleInterval.convert()) },
             { socketClient.subscribeCandle(pair.asString(), candleInterval.value) }
         )
 

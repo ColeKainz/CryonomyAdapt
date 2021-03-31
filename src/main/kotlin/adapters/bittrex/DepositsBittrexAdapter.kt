@@ -28,7 +28,7 @@ internal interface DepositsBittrexAdapter : BittrexAdapterBase {
 
     override fun subscribeOpenDeposits(coin: Coin?, status: DepositStatus?): AdapterObservable<Deposit> {
         val handler = SyncHandler(
-            { client.deposits.checkOpenDeposits().sequence },
+            { client.deposits.checkOpenDeposits() },
             { socketClient.subscribeDeposit() }
         )
 
